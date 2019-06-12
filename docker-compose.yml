@@ -1,0 +1,57 @@
+version: '3'
+services:
+
+  redis:
+    image: redis
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  producer1:
+    build: ./producer/
+    environment:
+      - "REDIS_HOST=redis"
+      - "ID=0"
+      - "DELAY=1"
+    depends_on:
+      - redis
+
+  producer2:
+    build: ./producer/
+    environment:
+      - "REDIS_HOST=redis"
+      - "ID=2"
+      - "DELAY=3"
+    depends_on:
+      - redis
+
+  merger:
+    build: ./merger/
+    environment:
+      - "REDIS_HOST=redis"
+    depends_on:
+      - redis
+
+  consumer1:
+    build: ./consumer/
+    environment:
+      - "REDIS_HOST=redis"
+      - "ID=1"
+    depends_on:
+      - redis
+
+#  consumer2:
+#    build: ./consumer/
+#    environment:
+#      - "REDIS_HOST=redis"
+#      - "ID=2"
+#    depends_on:
+#      - redis
+#
+#  consumer3:
+#    build: ./consumer/
+#    environment:
+#      - "REDIS_HOST=redis"
+#      - "ID=3"
+#    depends_on:
+#      - redis
+
