@@ -88,7 +88,7 @@ def loop(args):
 
         # read from all streams 1 element at a time, and feed them into the merged stream
         key_and_ids = list(streams.keys()) + [streams.get(k) for k in streams.keys()]
-        data = client.execute_command("XREAD", 'COUNT', '1', 'BLOCK', '100', 'STREAMS', *key_and_ids)
+        data = client.execute_command("XREAD", 'COUNT', '1', 'BLOCK', 5000, 'STREAMS', *key_and_ids)
 
         if not data:
             continue

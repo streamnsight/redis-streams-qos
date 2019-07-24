@@ -50,8 +50,6 @@ def loop(args):
                     'STREAMS', STREAM_NAME, idx]
         data = client.execute_command(*cmd_args)
         if not data:
-            sleep(0.03)
-            log.info('.')
             continue
 
         if recovery:
