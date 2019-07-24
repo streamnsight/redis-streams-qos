@@ -24,10 +24,13 @@ def get_msg(row):
 
 
 def get_queue_status(client):
-    info = client.execute_command("XINFO", 'GROUPS', STREAM_NAME)
-    nb_consumers = info[0][3]
-    pending = info[0][5]
-    queue_length = client.execute_command("XLEN", STREAM_NAME)
+    pipeline = client.pipeline()
+    pipeline.execute_command("XINFO", 'GROUPS', STREAM_NAME)
+    pipeline.execute_command("XLEN", STREAM_NAME)
+    info = pipeline.execute()
+    nb_consumers = info[0][0][3]
+    pending = info[0][0][5]
+    queue_length = info[1]
     return nb_consumers, queue_length, pending
 
 
